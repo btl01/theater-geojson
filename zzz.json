@@ -1,0 +1,14 @@
+{
+  "geometry": {
+    "type": "Point",
+    "coordinates": [-97.429245, 32.804398]
+  },
+  "properties": {
+    "address": {
+      "street1": "5944 Quebec St",
+      "city": "Fort Worth",
+      "state": "TX",
+      "zipcode": 76135
+    }
+  }
+}

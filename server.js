@@ -11,12 +11,6 @@ app.use(cors({ origin: true }));
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
 
-let count = 0;
-app.use((req, res, next) => {
-  count++;
-  console.log(count);
-  next();
-});
 connectDB();
 
 app.use('/api/theater', theater);

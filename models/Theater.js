@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const TheaterSchema = new Schema({
   location: {
     address: {
-      street: String,
+      street1: String,
       city: String,
       state: String,
       zipcode: Number,

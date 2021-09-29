@@ -4,24 +4,31 @@ const Theater = require('../models/Theater');
 const router = express.Router();
 
 // For convert data
-// const form = {
-//   type: 'Feature',
-//   geometry: { type: 'Point', coordinates: [-93.24565, 44.85466] },
-//   properties: { address: '340 W Market, Bloomington' },
-// };
-// const s = {
-//   location: {
-//     address: {
-//       street1: '340 W Market',
-//       city: 'Bloomington',
-//       state: 'MN',
-//       zipcode: 55425,
-//     },
-//     geo: { type: 'Point', coordinates: [-93.24565, 44.85466] },
-//   },
-//   _id: '59a47286cfa9a3a73e51e72c',
-//   theaterId: 1000,
-// };
+const location = {
+  type: 'Feature',
+  geometry: { type: 'Point', coordinates: [-93.24565, 44.85466] },
+  properties: {
+    address: {
+      street1: '340 W Market',
+      city: 'Bloomington',
+      state: 'MN',
+      zipcode: 55425,
+    },
+  },
+};
+const theater = {
+  location: {
+    address: {
+      street1: '340 W Market',
+      city: 'Bloomington',
+      state: 'MN',
+      zipcode: 55425,
+    },
+    geo: { type: 'Point', coordinates: [-93.24565, 44.85466] },
+  },
+  _id: '59a47286cfa9a3a73e51e72c',
+  theaterId: 1000,
+};
 
 function convertGeo(theater) {
   if (theater.location.address.zipcode === undefined)
@@ -34,30 +41,118 @@ function convertGeo(theater) {
   };
 }
 
+function revertGeo(location) {
+  const coordinates = location.geometry.coordinates;
+  const addressProp = location.properties.address;
+  if (
+    coordinates &&
+    coordinates.constructor === Array &&
+    coordinates.length == 2 &&
+    typeof coordinates[0] === 'number' &&
+    typeof coordinates[1] === 'number'
+  ) {
+    const theater = {
+      location: {
+        address: { street1: '', city: '', state: '', zipcode: '' },
+        geo: { type: 'Point', coordinates: [] },
+      },
+    };
+    theater.location.geo.coordinates = coordinates;
+    if (addressProp) {
+      theater.location.address = {
+        ...theater.location.address,
+        ...addressProp,
+      };
+    }
+    return theater;
+  } else {
+    throw new Error('geometry.coordinates required 2 number');
+  }
+}
+
+// @route GET api/theater
+// @desc get all theater info
+// @access Public
 router.get('/', async (req, res) => {
-  let data = await Theater.find().limit(5);
+  let data = await Theater.find();
   res.json(data);
 });
 
+// @route GET api/theater/geojson
+// @desc get theater geojson ALL or LIMIT
+// @ access Public
 router.get('/geojson', async (req, res) => {
-  let data = await Theater.find();
-  data = data.map(convertGeo);
-  res.json({
-    type: 'FeatureCollection',
-    features: data,
-  });
+  try {
+    const limit = parseInt(req.query.limit);
+    let data = limit ? await Theater.find().limit(limit) : await Theater.find();
+    data = data.map(convertGeo);
+    res.json({
+      success: true,
+      type: 'FeatureCollection',
+      features: data,
+    });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
 });
 
+// @route GET api/theater/geojson
+// @desc get theater geojson by ID
+// @ access Public
+router.get('/geojson/:_id', async (req, res) => {
+  try {
+    let data = await Theater.findById(req.params._id);
+    data = convertGeo(data);
+    res.json({
+      success: true,
+      data,
+    });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+});
+
+// @route POST api/theater/geojson
+// @desc post theater geojson
+// @ access Public
+router.post('/geojson', async (req, res) => {
+  try {
+    const theater = revertGeo(req.body);
+    let data = await Theater.create(theater);
+    data = convertGeo(data);
+    res.json({ success: true, data });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+});
+
+// @route PUT api/theater/geojson
+// @desc update theater geojson
+// @ access Public
+router.put('/geojson/:_id', async (req, res) => {
+  try {
+    const _id = req.params._id;
+    const theater = revertGeo(req.body);
+    let data = await Theater.findByIdAndUpdate(_id, theater, { new: true });
+    data = convertGeo(data);
+    res.json({ success: true, data });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+});
+
+// @route DELETE api/theater/geojson
+// @desc delete theater geojson by ID
+// @ access Public
 router.delete('/geojson/:_id', (req, res) => {
-  const _id = req.params._id;
-  Theater.findByIdAndDelete(_id, function (err, data) {
+  Theater.findByIdAndDelete(req.params._id, function (err, data) {
     if (err) {
       console.log(err.message);
-      res.end();
+      res.json({ success: false, message: err.message });
       return;
     }
-    console.log(data);
-    res.json(data);
+    data = data === null ? data : convertGeo(data);
+    res.json({ success: true, data });
   });
 });
 
