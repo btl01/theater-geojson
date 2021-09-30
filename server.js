@@ -10,14 +10,14 @@ const app = express();
 app.use(cors({ origin: true }));
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
+app.use(express.static(__dirname + '/public'));
 
 connectDB();
 
 app.use('/api/theater', theater);
 
 app.all('/', (req, res) => {
-  // res.send('<a href="/api/theater/geojson">/api/theater/geojson</a>');
-  res.sendFile(__dirname + '/example.txt');
+  res.sendFile(__dirname + '/views/index.html');
 });
 
 app.listen(process.env.PORT || 8005, () => {

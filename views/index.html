@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Create and style clusters</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      type="text/javascript"
+      charset="utf8"
+      src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.js"
+    ></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.4.1/mapbox-gl.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+
+  <body>
+    <div
+      class="modal fade"
+      id="formModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="formModal"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Location</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <form id="myForm">
+            <div class="modal-body">
+              <input type="hidden" name="_id" id="_id" disabled />
+              <div class="form-group">
+                <label for="geoX">geoX</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="geoX"
+                  name="geoX"
+                  placeholder="Enter number from -180 to 180"
+                  max="180"
+                  min="-180"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="geoY">geoY</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="geoY"
+                  name="geoY"
+                  placeholder="Enter number from -90 to 90"
+                  max="90"
+                  min="-90"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="street1">street</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="street1"
+                  name="street1"
+                  placeholder="Enter Street"
+                />
+              </div>
+              <div class="form-group">
+                <label for="city">city</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="city"
+                  name="city"
+                  placeholder="Enter City"
+                />
+              </div>
+              <div class="form-group">
+                <label for="state">state</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="state"
+                  name="state"
+                  placeholder="Enter State"
+                />
+              </div>
+              <div class="form-group">
+                <label for="zipcode">zipcode</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="zipcode"
+                  name="zipcode"
+                  placeholder="Enter number"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                id="closeModal"
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div id="table-div">
+      <table id="table" class="display" style="width: 100%">
+        <thead>
+          <tr>
+            <th class="id">id</th>
+            <th>geoX</th>
+            <th>geoY</th>
+            <th>street</th>
+            <th>city</th>
+            <th>state</th>
+            <th>zipcode</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <script src="/javascripts/main.js"></script>
+  </body>
+</html>
