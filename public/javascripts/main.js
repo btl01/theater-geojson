@@ -14,8 +14,10 @@ $(document).ready(function () {
     columnDefs: [
       {
         targets: [0],
-        visible: false,
+        // visible: false,
+        className: 'hide',
         searchable: false,
+        sortable: false,
       },
     ],
     ajax: {
@@ -35,7 +37,7 @@ $(document).ready(function () {
         searchable: false,
         sortable: false,
         mRender: function () {
-          return '<button class="btn btn-primary" onclick="fillUpdateForm(this)">Edit</button>';
+          return '<button class="btn btn-primary btn-sm" onclick="fillUpdateForm(this)">Edit</button>';
         },
       },
       {
@@ -43,7 +45,7 @@ $(document).ready(function () {
         searchable: false,
         sortable: false,
         mRender: function () {
-          return '<button class="btn btn-danger" onclick="deleteLocation(this)">Delete</button>';
+          return '<button class="btn btn-danger btn-sm" onclick="deleteLocation(this)">Delete</button>';
         },
       },
     ],
@@ -76,7 +78,7 @@ $(document).ready(function () {
     `<button
     id="show-form"
     type="button"
-    class="btn btn-primary"
+    class="btn btn-primary btn-sm"
     data-toggle="modal"
     data-target="#formModal"
     >
@@ -209,10 +211,10 @@ function addRow(data) {
   <td>${state}</td>
   <td>${zipcode}</td>
   <td>
-    <button class="btn btn-primary" onclick="fillUpdateForm(this)">Edit</button>
+    <button class="btn btn-primary btn-sm" onclick="fillUpdateForm(this)">Edit</button>
   </td>
   <td>
-    <button class="btn btn-danger" onclick="deleteLocation(this)">
+    <button class="btn btn-danger btn-sm" onclick="deleteLocation(this)">
       Delete
     </button>
   </td>
