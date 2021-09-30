@@ -16,7 +16,10 @@ connectDB();
 app.use('/api/theater', theater);
 
 app.all('/', (req, res) => {
-  res.send('not found');
+  // res.send('<a href="/api/theater/geojson">/api/theater/geojson</a>');
+  res.sendFile(__dirname + '/example.txt');
 });
 
-app.listen(process.env.PORT || 3000);
+app.listen(process.env.PORT || 8005, () => {
+  console.log(`PORT ${process.env.PORT || 8005}`);
+});
