@@ -7,8 +7,8 @@ const map = new mapboxgl.Map({
   zoom: 3,
 });
 
-const apiUrl = 'http://101.96.66.219:8005/api/theater/geojson/';
-// const apiUrl = 'http://localhost:8005/api/theater/geojson/';
+const apiUrl = 'http://101.96.66.219:8005/api/theater/geojson';
+// const apiUrl = 'http://localhost:8005/api/theater/geojson';
 const entityMap = {
   '&': '&amp;',
   '<': '&lt;',
@@ -28,8 +28,9 @@ function escapeHtml(string) {
   });
 }
 
+let table;
 $(document).ready(function () {
-  $('#table').DataTable({
+  table = $('#table').DataTable({
     columnDefs: [
       {
         targets: [0],
@@ -116,7 +117,7 @@ $(document).ready(function () {
     let message = 'Add location successfully';
     const id = $('#_id').val();
     if (id) {
-      url += id;
+      url += `/${id}`;
       method = 'PUT';
       message = 'Location change done';
     }
@@ -149,6 +150,7 @@ $(document).ready(function () {
         alert(message);
         clearForm();
         $('#closeModal').click();
+        updateMap();
         if (method === 'POST') {
           addRow(response.data);
         } else {
@@ -166,14 +168,17 @@ function deleteLocation(item) {
   const id = row.children(':first').text();
 
   const settings = {
-    url: apiUrl + id,
+    url: apiUrl + `/${id}`,
     method: 'DELETE',
     timeout: 0,
   };
   $.ajax(settings).done(function (response) {
     console.log(response);
-    if (response) {
+    if (response.success) {
       row.remove();
+      updateMap();
+    } else {
+      alert('Something went wrong');
     }
   });
 }
@@ -332,9 +337,6 @@ map.on('load', () => {
   // the location of the feature, with
   // description HTML from its properties.
   map.on('click', 'unclustered-point', e => {
-    const currentBound = map.getBounds();
-    console.log(currentBound);
-    // console.log(e.lngLat);
     const coordinates = e.features[0].geometry.coordinates.slice();
     const address = e.features[0].properties.address;
     // Ensure that if the map is zoomed out such that
@@ -359,4 +361,16 @@ map.on('load', () => {
   map.on('mousemove', e => {
     document.getElementById('info').innerHTML = JSON.stringify(e.lngLat.wrap());
   });
+  map.on('moveend', () => {
+    const currentBound = map.getBounds();
+    const _ne = Object.values(currentBound._ne).toString();
+    const _sw = Object.values(currentBound._sw).toString();
+    const url = apiUrl + `/box?_ne=${_ne}&_sw=${_sw}`;
+    // console.log(url);
+    table.ajax.url(url).load();
+  });
 });
+
+function updateMap() {
+  map.getSource('earthquakes').setData(apiUrl);
+}
