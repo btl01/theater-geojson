@@ -3,33 +3,6 @@ const Theater = require('../models/Theater');
 
 const router = express.Router();
 
-// For convert data
-const location = {
-  type: 'Feature',
-  geometry: { type: 'Point', coordinates: [-93.24565, 44.85466] },
-  properties: {
-    address: {
-      street1: '340 W Market',
-      city: 'Bloomington',
-      state: 'MN',
-      zipcode: 55425,
-    },
-  },
-};
-const theater = {
-  location: {
-    address: {
-      street1: '340 W Market',
-      city: 'Bloomington',
-      state: 'MN',
-      zipcode: 55425,
-    },
-    geo: { type: 'Point', coordinates: [-93.24565, 44.85466] },
-  },
-  _id: '59a47286cfa9a3a73e51e72c',
-  theaterId: 1000,
-};
-
 function convertGeo(theater) {
   if (theater.location.address.zipcode === undefined)
     theater.location.address.zipcode = '';
@@ -95,6 +68,28 @@ router.get('/geojson', async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 });
+
+// @route GET api/theater/geojson/area
+// @desc get theater geojson by box area
+// @ access Public
+router.get('/geojson/box', async (req, res) => {
+  try {
+    const _ne = req.query._ne.split(',').map(x => parseFloat(x));
+    const _sw = req.query._sw.split(',').map(x => parseFloat(x));
+    let data = await Theater.find({
+      'location.geo': { $geoWithin: { $box: [_ne, _sw] } },
+    });
+    data = data.map(convertGeo);
+    res.json({ success: true, type: 'FeatureCollection', features: data });
+  } catch (error) {
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+function checkCoordinates(array) {}
 
 // @route GET api/theater/geojson
 // @desc get theater geojson by ID
