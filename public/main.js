@@ -9,6 +9,25 @@ const map = new mapboxgl.Map({
 
 const apiUrl = 'http://101.96.66.219:8005/api/theater/geojson/';
 // const apiUrl = 'http://localhost:8005/api/theater/geojson/';
+const entityMap = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '(': '&#40',
+  ')': '&#41',
+  '"': '&quot;',
+  "'": '&#39;',
+  '/': '&#x2F;',
+  '`': '&#x60;',
+  '=': '&#x3D;',
+  ';': '&#59',
+};
+function escapeHtml(string) {
+  return String(string).replace(/[&<>()"'`;=\/]/g, function (s) {
+    return entityMap[s];
+  });
+}
+
 $(document).ready(function () {
   $('#table').DataTable({
     columnDefs: [
@@ -25,13 +44,13 @@ $(document).ready(function () {
       dataSrc: 'features',
     },
     columns: [
-      { data: '_id' },
-      { data: 'geometry.coordinates.0' },
-      { data: 'geometry.coordinates.1' },
-      { data: 'properties.address.street1' },
-      { data: 'properties.address.city' },
-      { data: 'properties.address.state' },
-      { data: 'properties.address.zipcode' },
+      { data: '_id', render: escapeHtml },
+      { data: 'geometry.coordinates.0', render: escapeHtml },
+      { data: 'geometry.coordinates.1', render: escapeHtml },
+      { data: 'properties.address.street1', render: escapeHtml },
+      { data: 'properties.address.city', render: escapeHtml },
+      { data: 'properties.address.state', render: escapeHtml },
+      { data: 'properties.address.zipcode', render: escapeHtml },
       {
         data: null,
         searchable: false,
@@ -195,21 +214,27 @@ function updateRow(data) {
   row.find('td:nth-child(7)').text(zipcode);
 }
 
-var oddOrEven = 1;
+const oddOrEven = (() => {
+  let n = 1;
+  return () => {
+    n = 1 - n;
+    return n;
+  };
+})();
+
 function addRow(data) {
-  oddOrEven = 1 - oddOrEven;
   const _id = data._id;
   const [geoX, geoY] = data.geometry.coordinates;
   const { street1, city, state, zipcode } = data.properties.address;
-  const rowClass = oddOrEven === 0 ? 'even' : 'odd';
+  const rowClass = oddOrEven() === 0 ? 'even' : 'odd';
   $('tbody').prepend(`<tr class="${rowClass}">
   <td class="sorting_1 hide">${_id}</td>
-  <td>${geoX}</td>
-  <td>${geoY}</td>
-  <td>${street1}</td>
-  <td>${city}</td>
-  <td>${state}</td>
-  <td>${zipcode}</td>
+  <td>${escapeHtml(geoX)}</td>
+  <td>${escapeHtml(geoY)}</td>
+  <td>${escapeHtml(street1)}</td>
+  <td>${escapeHtml(city)}</td>
+  <td>${escapeHtml(state)}</td>
+  <td>${escapeHtml(zipcode)}</td>
   <td>
     <button class="btn btn-primary btn-sm" onclick="fillUpdateForm(this)">Edit</button>
   </td>
@@ -307,6 +332,9 @@ map.on('load', () => {
   // the location of the feature, with
   // description HTML from its properties.
   map.on('click', 'unclustered-point', e => {
+    const currentBound = map.getBounds();
+    console.log(currentBound);
+    // console.log(e.lngLat);
     const coordinates = e.features[0].geometry.coordinates.slice();
     const address = e.features[0].properties.address;
     // Ensure that if the map is zoomed out such that
@@ -327,5 +355,8 @@ map.on('load', () => {
   });
   map.on('mouseleave', 'clusters', () => {
     map.getCanvas().style.cursor = '';
+  });
+  map.on('mousemove', e => {
+    document.getElementById('info').innerHTML = JSON.stringify(e.lngLat.wrap());
   });
 });

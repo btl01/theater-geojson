@@ -1,7 +1,6 @@
 Example REST API
 
-host: http://101.96.66.219:8000
-
+host: http://101.96.66.219:8005
 ###
 
 DELETE {host}/api/theater/geojson/6154981a1ebc9c20c505be11
