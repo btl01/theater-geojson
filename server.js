@@ -1,6 +1,7 @@
 const { urlencoded } = require('express');
 const express = require('express');
 const cors = require('cors');
+const compression = require('compression');
 const process = require('process');
 
 const connectDB = require('./config/db');
@@ -8,6 +9,7 @@ const theater = require('./routers/theater');
 
 const app = express();
 
+app.use(compression());
 app.use(cors({ origin: true }));
 app.use(express.json());
 app.use(urlencoded({ extended: false }));
@@ -17,8 +19,8 @@ connectDB();
 
 app.use('/api/theater', theater);
 
-app.all('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+app.get('/', (req, res) => {
+  res.redirect('/');
 });
 
 if (process.pid) {

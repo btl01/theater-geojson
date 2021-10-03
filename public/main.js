@@ -372,5 +372,6 @@ map.on('load', () => {
 });
 
 function updateMap() {
+  console.log(map.getSource('earthquakes'));
   map.getSource('earthquakes').setData(apiUrl);
 }
