@@ -161,6 +161,8 @@ $(document).ready(function () {
       }
     });
   });
+
+  $('button[data-dismiss="modal"]').click(clearForm);
 });
 
 function deleteLocation(item) {

@@ -28,5 +28,5 @@ if (process.pid) {
 }
 
 app.listen(process.env.PORT || 8005, () => {
-  console.log(`PORT ${process.env.PORT || 8005}`);
+  console.log('http://localhost:' + `${process.env.PORT || 8005}`);
 });
