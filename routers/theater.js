@@ -89,8 +89,6 @@ router.get('/geojson/box', async (req, res) => {
   }
 });
 
-function checkCoordinates(array) {}
-
 // @route GET api/theater/geojson
 // @desc get theater geojson by ID
 // @ access Public
