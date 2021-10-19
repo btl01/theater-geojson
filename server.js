@@ -19,10 +19,6 @@ connectDB();
 
 app.use('/api/theater', theater);
 
-app.get('/', (req, res) => {
-  res.redirect('/');
-});
-
 if (process.pid) {
   console.log('This process is your pid ' + process.pid);
 }

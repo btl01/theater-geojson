@@ -7,8 +7,7 @@ const map = new mapboxgl.Map({
   zoom: 3,
 });
 
-const apiUrl = 'http://101.96.66.219:8005/api/theater/geojson';
-// const apiUrl = 'http://localhost:8005/api/theater/geojson';
+const apiUrl = 'https://101.96.66.219/api/theater/geojson';
 const entityMap = {
   '&': '&amp;',
   '<': '&lt;',
@@ -156,12 +155,13 @@ $(document).ready(function () {
         } else {
           updateRow(response.data);
         }
+      } else if (response.success == false) {
+        alert(response.message);
       } else {
         alert('Something went wrong. Please try again!');
       }
     });
   });
-
   $('button[data-dismiss="modal"]').click(clearForm);
 });
 
@@ -179,6 +179,8 @@ function deleteLocation(item) {
     if (response.success) {
       row.remove();
       updateMap();
+    } else if (response.success == false) {
+      alert(response.message);
     } else {
       alert('Something went wrong');
     }
@@ -254,17 +256,12 @@ function addRow(data) {
 }
 
 map.on('load', () => {
-  // Add a new source from our GeoJSON data and
-  // set the 'cluster' option to true. GL-JS will
-  // add the point_count property to your source data.
   map.addSource('earthquakes', {
     type: 'geojson',
-    // Point to GeoJSON data. This example visualizes all M1.0+ earthquakes
-    // from 12/22/15 to 1/21/16 as logged by USGS' Earthquake hazards program.
     data: apiUrl,
     cluster: true,
-    clusterMaxZoom: 14, // Max zoom to cluster points on
-    clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+    clusterMaxZoom: 14,
+    clusterRadius: 50,
   });
 
   map.addLayer({
@@ -273,11 +270,6 @@ map.on('load', () => {
     source: 'earthquakes',
     filter: ['has', 'point_count'],
     paint: {
-      // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-      // with three steps to implement three types of circles:
-      //   * Blue, 20px circles when point count is less than 100
-      //   * Yellow, 30px circles when point count is between 100 and 750
-      //   * Pink, 40px circles when point count is greater than or equal to 750
       'circle-color': [
         'step',
         ['get', 'point_count'],
@@ -316,7 +308,6 @@ map.on('load', () => {
     },
   });
 
-  // inspect a cluster on click
   map.on('click', 'clusters', e => {
     const features = map.queryRenderedFeatures(e.point, {
       layers: ['clusters'],
@@ -334,16 +325,9 @@ map.on('load', () => {
       });
   });
 
-  // When a click event occurs on a feature in
-  // the unclustered-point layer, open a popup at
-  // the location of the feature, with
-  // description HTML from its properties.
   map.on('click', 'unclustered-point', e => {
     const coordinates = e.features[0].geometry.coordinates.slice();
     const address = e.features[0].properties.address;
-    // Ensure that if the map is zoomed out such that
-    // multiple copies of the feature are visible, the
-    // popup appears over the copy being pointed to.
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
@@ -368,7 +352,6 @@ map.on('load', () => {
     const _ne = Object.values(currentBound._ne).toString();
     const _sw = Object.values(currentBound._sw).toString();
     const url = apiUrl + `/box?_ne=${_ne}&_sw=${_sw}`;
-    // console.log(url);
     table.ajax.url(url).load();
   });
 });

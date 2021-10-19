@@ -1,47 +1,10 @@
 const express = require('express');
+
 const Theater = require('../models/Theater');
+const protectedLocal = require("../middlewares/protectedLocal");
+const { convertGeo, revertGeo } = require('../utils/convertGeo');
 
 const router = express.Router();
-
-function convertGeo(theater) {
-  if (theater.location.address.zipcode === undefined)
-    theater.location.address.zipcode = '';
-  return {
-    type: 'Feature',
-    geometry: theater.location.geo,
-    properties: { address: theater.location.address },
-    _id: theater._id,
-  };
-}
-
-function revertGeo(location) {
-  const coordinates = location.geometry.coordinates;
-  const addressProp = location.properties.address;
-  if (
-    coordinates &&
-    coordinates.constructor === Array &&
-    coordinates.length == 2 &&
-    typeof coordinates[0] === 'number' &&
-    typeof coordinates[1] === 'number'
-  ) {
-    const theater = {
-      location: {
-        address: { street1: '', city: '', state: '', zipcode: '' },
-        geo: { type: 'Point', coordinates: [] },
-      },
-    };
-    theater.location.geo.coordinates = coordinates;
-    if (addressProp) {
-      theater.location.address = {
-        ...theater.location.address,
-        ...addressProp,
-      };
-    }
-    return theater;
-  } else {
-    throw new Error('geometry.coordinates required 2 number');
-  }
-}
 
 // @route GET api/theater
 // @desc get all theater info
@@ -122,7 +85,7 @@ router.post('/geojson', async (req, res) => {
 // @route PUT api/theater/geojson
 // @desc update theater geojson
 // @ access Public
-router.put('/geojson/:_id', async (req, res) => {
+router.put('/geojson/:_id', protectedLocal, async (req, res) => {
   try {
     const _id = req.params._id;
     const theater = revertGeo(req.body);
@@ -137,7 +100,7 @@ router.put('/geojson/:_id', async (req, res) => {
 // @route DELETE api/theater/geojson
 // @desc delete theater geojson by ID
 // @ access Public
-router.delete('/geojson/:_id', (req, res) => {
+router.delete('/geojson/:_id', protectedLocal, (req, res) => {
   Theater.findByIdAndDelete(req.params._id, function (err, data) {
     if (err) {
       console.log(err.message);
