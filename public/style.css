@@ -49,3 +49,7 @@ body {
   background: #fff;
   z-index: 2;
 }
+
+.inline-block {
+  display: inline-block;
+}

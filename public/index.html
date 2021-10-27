@@ -2,16 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1,maximum-scale=1,user-scalable=no"
-    />
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
-    <link
-      href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css"
-      rel="stylesheet"
-    />
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet" />
     <script
       src="https://code.jquery.com/jquery-3.6.0.js"
       integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
@@ -22,54 +16,78 @@
       charset="utf8"
       src="https://cdn.datatables.net/1.11.2/js/jquery.dataTables.js"
     ></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.css" />
     <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
-      type="text/css"
-      href="https://cdn.datatables.net/1.11.2/css/jquery.dataTables.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
     <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://www.gstatic.com/firebasejs/7.4.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/ui/5.0.0/firebase-ui-auth.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/5.0.0/firebase-ui-auth.css" />
+    <script src="auth.js"></script>
     <link rel="stylesheet" href="style.css" />
     <title>Theater locations</title>
   </head>
   <body>
     <div class=".container-fluid">
-      <div
-        class="modal fade"
-        id="formModal"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="formModal"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="dropdown">
+        <img
+          id="avatar"
+          src=""
+          data-bs-toggle="dropdown"
+          width="38x"
+          height="38x"
+          class="user avatar rounded-circle ms-3 d-none dropdown-toggle"
+        />
+      </div>
+      <div class="modal d-block1" id="modal-login" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content shadow">
+            <div class="modal-header">
+              <h5 class="modal-title">Login</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div id="firebaseui-auth-container" class="guest"></div>
+              <div id="user-signed-in" class="d-none d-flex user">
+                <div class="flex-grow-1 d-flex justify-content-center">
+                  <img src="" width="110px" height="110px" class="avatar rounded-circle" />
+                </div>
+                <div class="flex-grow-1 d-flex flex-column align-self-center me-4">
+                  <div id="name" class="align-self-center text-primary fs-5">Name</div>
+                  <div id="email" class="align-self-center">Email</div>
+                  <div id="phone">Phone</div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer d-none user">
+              <button id="sign-out" type="button" class="btn btn-danger" onclick="firebase.auth().signOut();">
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal fade" id="formModal" aria-hidden="true" aria-labelledby="formModalTitle" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Location</h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
-                <span aria-hidden="true">&times;</span>
-              </button>
+              <h5 class="modal-title" id="formModalTitle">Location</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <form id="myForm">
               <div class="modal-body">
                 <input type="hidden" name="_id" id="_id" disabled />
-                <div class="form-group">
-                  <label for="geoX">geoX</label>
+                <div class="mb-3">
+                  <label class="form-label" for="geoX">geoX</label>
                   <input
                     type="text"
                     class="form-control"
@@ -81,8 +99,8 @@
                     required
                   />
                 </div>
-                <div class="form-group">
-                  <label for="geoY">geoY</label>
+                <div class="mb-3">
+                  <label class="form-label" for="geoY">geoY</label>
                   <input
                     type="text"
                     class="form-control"
@@ -94,56 +112,25 @@
                     required
                   />
                 </div>
-                <div class="form-group">
-                  <label for="street1">street</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="street1"
-                    name="street1"
-                    placeholder="Enter Street"
-                  />
+                <div class="mb-3">
+                  <label class="form-label" for="street1">street</label>
+                  <input type="text" class="form-control" id="street1" name="street1" placeholder="Enter Street" />
                 </div>
-                <div class="form-group">
-                  <label for="city">city</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="city"
-                    name="city"
-                    placeholder="Enter City"
-                  />
+                <div class="mb-3">
+                  <label class="form-label" for="city">city</label>
+                  <input type="text" class="form-control" id="city" name="city" placeholder="Enter City" />
                 </div>
-                <div class="form-group">
-                  <label for="state">state</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="state"
-                    name="state"
-                    placeholder="Enter State"
-                  />
+                <div class="mb-3">
+                  <label class="form-label" for="state">state</label>
+                  <input type="text" class="form-control" id="state" name="state" placeholder="Enter State" />
                 </div>
-                <div class="form-group">
-                  <label for="zipcode">zipcode</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    id="zipcode"
-                    name="zipcode"
-                    placeholder="Enter number"
-                  />
+                <div class="mb-3">
+                  <label class="form-label" for="zipcode">zipcode</label>
+                  <input type="number" class="form-control" id="zipcode" name="zipcode" placeholder="Enter number" />
                 </div>
               </div>
               <div class="modal-footer">
-                <button
-                  id="closeModal"
-                  type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal"
-                >
-                  Close
-                </button>
+                <button id="closeModal" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </form>

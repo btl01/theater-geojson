@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "theater-map-423db",
+  "private_key_id": "d9f95ccc3e898aa1756874123da1016ab3a87957",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDf6es/9+q7D0SO\nRAK866oJJYSLZna0a17HDULQJvYRcqIPRrfU7x7j+y8MX1T1u15eP8Luw+KoEoPj\nfhK1F+e6yTDSwLEjhiox62f2lEsdS+88/Zc6RKPGjP3tmaNhSQIW4N+QvHriBb+N\nKYo2lFpsCZxagit3mmF6tMUPbZDFfpFr3OLF635CekqXl7b9eXKl1dABU8u0CgKg\n5vcS9KxmTb1OFjTAZ3/wZ0wu0V+SGQSvVg8VPAk132WavejyjuJeh20K0XebuJUu\njDUIi13wM5OoPD8f6PXd3tX/fUTJNm7cPzJvipW0SLfzAni/z3Zv0cYD26XumEbr\nXTuDwvDNAgMBAAECggEAEJrxhMgXGBySP3YAuU+ax7HeFKkactfRlV5rjtyM0WTD\nFZyaI8hAmLSh27+IIURuGPw5Mb7Ez3phXdzAI2jsmPgJpF+A43sJebPqUlQosTlW\nj8XYp2Fmvzc+hOvTZ3K5cnE7yH6Jzbrnu968RBRCvmdaDoY/wKS/cjuiBOUMYEZB\nPtSFvxmnad0ZOzof8gSLCeuUQuL01xmFuCxdyrrsUehOymLJW8wtczyBAQWK/6dD\naV2AfFKmvao6OzL4nCkRAvj6+ahq9XkALcwsMVXLzMswGQhX/DXNk8YiabPzoiHl\nw/LUfsdKdHoBGsEnNTEPIo50jpgx8lcWAIeph1YeIQKBgQD6E42JWPXyJBw//4sw\n8OBq7a12rQHfR1psUh6UhJVUVIQGXs9vZw08hQBUsj35sdii5YQDd4JJxVoInmMQ\ngA2DQNDiFMbDEBC7Sjgkb1lTRJYEzv9eIe73kb9GZRwDFFeuyZ5M988EoAmt7E9n\nOw/EHOpSnesJyycUydusp6YpUQKBgQDlN7ew0AZiawzJwzab76eOYUshRPsNvMGX\n4uvadhrrRfrx2R1UpEl01NjuDEq1QLVdkVeJHnXOEOUF5QlPD2aCC4hQ7zVvPgbE\n0xO1JhQ6+cPx4UPHMm66Zc7Noll1/SmNLB4D9a9wihP+AMlZ5Am2HnaZ+oazIN5F\nxZd3ixNwvQKBgCEQXsFPIs2OGrIXfnbNEk7w9+NeAoZb78esn+BxGzFYL1CMTo7j\nKCvdRers2ibebc8z2119+pr4XewPzPdMhvzYoAWUS6dUw3GP4ZZnpn7M7azbFYaD\npA3Vll2fVrHNib5RZ/2zMgrhggYd3W2/sFj0ncKooH/d/V/RRJsyW1TRAoGBAIBl\n2KDTtm/U9WHj1yg8c8h+2Z32TQdh77PMKj/Cnsuh9LMa4qIyMO+f9zBJdGPZrn6O\nVtF5XZYjwpatuKwvvUUlfqOPi4gX36TLdCOqA/URSeCpRdVEe+Av/UsVITXFrUvm\nJZ4kNrU8s3w6JpAS/BmnMNqKCoA27it5RqJxJl+lAoGADQk8rOF2d2TmcqaLjfJs\nuLhbjCnxbo8ZyJdlqFGVb7hCqzM/B5C9b5+Y0BWNQAV678rc5mYW95ukhhL2k+ds\nptQw2dFo+NvRFi4TgVwAZ349LBJqvPRVehye3Ivg8jqYMo+6+ywiOWaS1JEvuIL+\nBW5tIgUzsrE1Bq0/O2u2a4M=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-nk1fw@theater-map-423db.iam.gserviceaccount.com",
+  "client_id": "111175720908039670414",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-nk1fw%40theater-map-423db.iam.gserviceaccount.com"
+}
